@@ -1,0 +1,44 @@
+# Based on https://github.com/metacontroller/metacontroller/blob/v2.0.4/Dockerfile
+name: metacontroller
+summary: Metacontroller in a ROCK.
+description: "Metacontroller  is an add-on for Kubernetes that makes it easy to write and deploy custom controllers in the form of simple scripts."
+version: "2.0.4_22.04_1"
+license: Apache-2.0
+build-base: ubuntu:22.04
+base: bare
+run-user: _daemon_
+services:
+  metacontroller:
+    command: metacontroller
+    working-dir: /usr/bin
+    override: replace
+    startup: enabled
+platforms:
+  amd64:
+
+parts:
+  metacontroller:
+    plugin: go
+    source: https://github.com/metacontroller/metacontroller
+    source-type: git
+    source-tag: "v2.0.4"
+    build-snaps:
+      - go/1.16/stable
+    build-environment:
+      - CGO_ENABLED: 0
+    stage-packages:
+      - ca-certificates
+    override-build: |
+      set -xe
+      make install
+      mkdir -p ${CRAFT_PART_INSTALL}/usr/bin
+      install -D ${CRAFT_PART_INSTALL}/bin/metacontroller ${CRAFT_PART_INSTALL}/usr/bin
+
+  security-team-requirement:
+    plugin: nil
+    override-build: |
+      # security requirement
+      # there are no packages installed in `bare` base which is used in this rock
+      mkdir -p ${CRAFT_PART_INSTALL}/usr/share/rocks
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query") \
+       > ${CRAFT_PART_INSTALL}/usr/share/rocks/dpkg.query
