@@ -29,7 +29,6 @@ parts:
     stage-packages:
       - ca-certificates
     override-build: |
-      set -xe
       make install
       mkdir -p ${CRAFT_PART_INSTALL}/usr/bin
       install -D ${CRAFT_PART_INSTALL}/bin/metacontroller ${CRAFT_PART_INSTALL}/usr/bin
