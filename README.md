@@ -1,2 +1,2 @@
 # metacontroller
-Rock for metacontroller
+rock for metacontroller
