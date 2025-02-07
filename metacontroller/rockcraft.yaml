@@ -1,4 +1,4 @@
-# Based on https://github.com/metacontroller/metacontroller/blob/v3.0.0/Dockerfile
+# Based on https://github.com/metacontroller/metacontroller/blob/v4.0.0/Dockerfile
 name: metacontroller
 summary: Metacontroller in a rock.
 description: "Metacontroller  is an add-on for Kubernetes that makes it easy to write and deploy custom controllers in the form of simple scripts."
