@@ -1,8 +1,8 @@
-# Based on https://github.com/metacontroller/metacontroller/blob/v3.0.0/Dockerfile
+# Based on https://github.com/metacontroller/metacontroller/blob/v4.11.22/Dockerfile
 name: metacontroller
 summary: Metacontroller in a rock.
 description: "Metacontroller  is an add-on for Kubernetes that makes it easy to write and deploy custom controllers in the form of simple scripts."
-version: "3.0.0"
+version: "4.11.22"
 license: Apache-2.0
 base: ubuntu@22.04
 run-user: _daemon_
@@ -20,17 +20,20 @@ parts:
     plugin: go
     source: https://github.com/metacontroller/metacontroller
     source-type: git
-    source-tag: "v3.0.0"
+    source-tag: "v4.11.22"
     build-snaps:
-      - go/1.18/stable
+      - go/1.23/stable
+      # goreleaser executable needed for `make build`
+      # See: https://github.com/metacontroller/metacontroller/blob/v4.11.22/Makefile#L22
+      - goreleaser/latest/stable
     build-environment:
       - CGO_ENABLED: 0
     stage-packages:
       - ca-certificates
     override-build: |
-      make install
+      make build
       mkdir -p ${CRAFT_PART_INSTALL}/usr/bin
-      install -D ${CRAFT_PART_INSTALL}/bin/metacontroller ${CRAFT_PART_INSTALL}/usr/bin
+      install -D metacontroller ${CRAFT_PART_INSTALL}/usr/bin
 
   security-team-requirement:
     plugin: nil
@@ -39,3 +42,4 @@ parts:
       (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && \
       dpkg-query --root=${CRAFT_PROJECT_DIR}/../bundles/ubuntu-22.04/rootfs/ -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) \
       > ${CRAFT_PART_INSTALL}/usr/share/rocks/dpkg.query
+
