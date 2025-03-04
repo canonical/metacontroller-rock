@@ -23,6 +23,8 @@ parts:
     source-tag: "v4.11.22"
     build-snaps:
       - go/1.23/stable
+      # goreleaser executable needed for `make build`
+      # See: https://github.com/metacontroller/metacontroller/blob/v4.11.22/Makefile#L22
       - goreleaser/latest/stable
     build-environment:
       - CGO_ENABLED: 0
@@ -41,4 +43,3 @@ parts:
       dpkg-query --root=${CRAFT_PROJECT_DIR}/../bundles/ubuntu-22.04/rootfs/ -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) \
       > ${CRAFT_PART_INSTALL}/usr/share/rocks/dpkg.query
 
-    
