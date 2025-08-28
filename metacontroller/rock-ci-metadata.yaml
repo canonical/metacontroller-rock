@@ -1,0 +1,6 @@
+integrations:
+  - consumer-repository: https://github.com/canonical/metacontroller-operator.git
+
+    replace-image:
+      - file: config.yaml
+        path: options.metacontroller-image.default
